@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Modernist Notebook Studio</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div>
+          <h1>Notebook Studio</h1>
+          <p class="subtitle">3D memory book with polaroid pages</p>
+        </div>
+        <button id="helpButton" class="ghost">How it works</button>
+      </header>
+
+      <main class="workspace">
+        <aside class="control-panel glass">
+          <h2>Page tools</h2>
+
+          <label class="field">
+            <span>Media URL (image/video)</span>
+            <input id="mediaUrl" type="url" placeholder="https://example.com/media.jpg" />
+          </label>
+
+          <div class="button-row">
+            <button id="addImageBtn">Add image</button>
+            <button id="addVideoBtn" class="secondary">Add video</button>
+          </div>
+
+          <label class="field">
+            <span>Quick note</span>
+            <textarea id="noteInput" rows="4" placeholder="Sketch your idea, memory, or caption..."></textarea>
+          </label>
+
+          <button id="addNoteBtn" class="wide">Add note to active page</button>
+
+          <hr />
+
+          <div class="button-row">
+            <button id="prevPageBtn" class="ghost">◀ Previous page</button>
+            <button id="nextPageBtn" class="ghost">Next page ▶</button>
+          </div>
+          <button id="newPageBtn" class="wide accent">+ Add new page</button>
+
+          <p id="pageIndicator" class="meta">Page 1 of 1</p>
+        </aside>
+
+        <section class="notebook-stage" aria-label="3D notebook">
+          <div class="spotlight"></div>
+          <div id="book" class="book" aria-live="polite"></div>
+        </section>
+      </main>
+    </div>
+
+    <dialog id="helpDialog">
+      <h3>Notebook Studio controls</h3>
+      <ul>
+        <li>Add images/videos by URL.</li>
+        <li>Add notes as stylish paper snippets.</li>
+        <li>Click page corners or use controls to flip.</li>
+        <li>Use “Add new page” to expand your storybook.</li>
+      </ul>
+      <form method="dialog">
+        <button>Close</button>
+      </form>
+    </dialog>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>
