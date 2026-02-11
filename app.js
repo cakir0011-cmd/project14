@@ -221,3 +221,131 @@ board.addEventListener("click", (event) => {
 
 addNote("yellow");
 addText();
+function createPolaroid(item, index) {
+  const card = document.createElement("article");
+  card.className = "polaroid";
+  card.style.setProperty("--tilt", tiltCycle[index % tiltCycle.length]);
+
+  const media = document.createElement(item.type === "video" ? "video" : "img");
+  if (item.type === "video") {
+    media.controls = true;
+    media.muted = true;
+  }
+  media.src = item.src;
+  media.alt = "Page media";
+
+  const caption = document.createElement("p");
+  caption.className = "caption";
+  caption.textContent = item.type === "video" ? "moving memory" : "still memory";
+
+  card.append(media, caption);
+  return card;
+}
+
+function createNote(item) {
+  const note = document.createElement("article");
+  note.className = "note";
+  note.textContent = item.text;
+  return note;
+}
+
+function renderPageContent(page) {
+  const content = document.createElement("div");
+  content.className = "page-content";
+
+  page.items.forEach((item, index) => {
+    if (item.type === "note") {
+      content.append(createNote(item));
+      return;
+    }
+    content.append(createPolaroid(item, index));
+  });
+
+  return content;
+}
+
+function renderBook() {
+  book.innerHTML = "";
+
+  state.pages.forEach((page, idx) => {
+    const pageEl = document.createElement("section");
+    const isLeft = idx < state.currentPage;
+    const isCurrent = idx === state.currentPage;
+
+    pageEl.className = `page ${isLeft ? "left" : "right"} ${isLeft ? "flipped" : ""} ${
+      isCurrent ? "active" : ""
+    }`;
+
+    pageEl.style.zIndex = String(200 - idx);
+
+    const face = document.createElement("div");
+    face.className = "page-face";
+    face.append(renderPageContent(page));
+
+    const handle = document.createElement("button");
+    handle.className = `flip-handle ${isLeft ? "left" : "right"}`;
+    handle.title = isLeft ? "Flip backward" : "Flip forward";
+    handle.addEventListener("click", () => {
+      if (isLeft) {
+        goToPage(idx);
+      } else {
+        goToPage(Math.min(idx + 1, state.pages.length - 1));
+      }
+    });
+
+    pageEl.append(face, handle);
+    book.append(pageEl);
+  });
+
+  pageIndicator.textContent = `Page ${state.currentPage + 1} of ${state.pages.length}`;
+}
+
+function goToPage(target) {
+  state.currentPage = Math.max(0, Math.min(target, state.pages.length - 1));
+  renderBook();
+}
+
+function addMedia(type) {
+  const clean = sanitizeUrl(mediaUrl.value.trim());
+  if (!clean) {
+    alert("Please enter a valid http/https media URL.");
+    return;
+  }
+
+  getCurrent().items.push({ type, src: clean });
+  mediaUrl.value = "";
+  renderBook();
+}
+
+function addNote() {
+  const text = noteInput.value.trim();
+  if (!text) {
+    alert("Write a note first.");
+    return;
+  }
+
+  getCurrent().items.push({ type: "note", text });
+  noteInput.value = "";
+  renderBook();
+}
+
+function addPage() {
+  state.pages.push({ items: [] });
+  goToPage(state.pages.length - 1);
+}
+
+addImageBtn.addEventListener("click", () => addMedia("image"));
+addVideoBtn.addEventListener("click", () => addMedia("video"));
+addNoteBtn.addEventListener("click", addNote);
+newPageBtn.addEventListener("click", addPage);
+prevPageBtn.addEventListener("click", () => goToPage(state.currentPage - 1));
+nextPageBtn.addEventListener("click", () => goToPage(state.currentPage + 1));
+
+helpButton.addEventListener("click", () => helpDialog.showModal());
+
+window.addEventListener("keydown", (event) => {
+  if (event.key === "ArrowLeft") goToPage(state.currentPage - 1);
+  if (event.key === "ArrowRight") goToPage(state.currentPage + 1);
+});
+
+renderBook();
