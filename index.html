@@ -3,70 +3,78 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Modernist Notebook Studio</title>
+    <title>Polaroid Infinite Board</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <div class="app-shell">
-      <header class="topbar">
-        <div>
-          <h1>Notebook Studio</h1>
-          <p class="subtitle">3D memory book with polaroid pages</p>
+    <header class="topbar">
+      <h1>Polaroid Infinite Board</h1>
+      <p>Drop media, notes, and text on an endless modern board.</p>
+    </header>
+
+    <main class="layout">
+      <aside class="panel">
+        <h2>Add content</h2>
+
+        <label class="field">
+          <span>Media URL</span>
+          <input id="mediaUrl" type="url" placeholder="https://...jpg / ...mp4" />
+        </label>
+
+        <div class="row">
+          <button id="addImageBtn">+ Polaroid image</button>
+          <button id="addVideoBtn" class="secondary">+ Polaroid video</button>
         </div>
-        <button id="helpButton" class="ghost">How it works</button>
-      </header>
 
-      <main class="workspace">
-        <aside class="control-panel glass">
-          <h2>Page tools</h2>
+        <label class="field">
+          <span>Frame color</span>
+          <input id="frameColor" type="color" value="#ffffff" />
+        </label>
 
-          <label class="field">
-            <span>Media URL (image/video)</span>
-            <input id="mediaUrl" type="url" placeholder="https://example.com/media.jpg" />
-          </label>
+        <h2>Notes</h2>
+        <label class="field">
+          <span>Note text</span>
+          <textarea id="noteText" rows="3" placeholder="Write your note..."></textarea>
+        </label>
+        <div class="row">
+          <button id="addNoteYellow" class="ghost">+ Yellow pad</button>
+          <button id="addNoteBlue" class="ghost">+ Blue pad</button>
+        </div>
 
-          <div class="button-row">
-            <button id="addImageBtn">Add image</button>
-            <button id="addVideoBtn" class="secondary">Add video</button>
-          </div>
+        <h2>Custom text</h2>
+        <label class="field">
+          <span>Text</span>
+          <input id="customText" type="text" placeholder="Type headline..." />
+        </label>
+        <label class="field">
+          <span>Font family</span>
+          <select id="fontFamily">
+            <option value="Inter, sans-serif">Inter</option>
+            <option value="'Playfair Display', serif">Playfair Display</option>
+            <option value="'Space Grotesk', sans-serif">Space Grotesk</option>
+            <option value="'Courier New', monospace">Courier New</option>
+            <option value="'Comic Sans MS', cursive">Comic Sans</option>
+          </select>
+        </label>
+        <button id="addTextBtn">+ Add text</button>
 
-          <label class="field">
-            <span>Quick note</span>
-            <textarea id="noteInput" rows="4" placeholder="Sketch your idea, memory, or caption..."></textarea>
-          </label>
+        <h2>Selected item</h2>
+        <label class="field">
+          <span>Size</span>
+          <input id="sizeSlider" type="range" min="100" max="900" value="280" />
+        </label>
+        <label class="field">
+          <span>Color (note/text/frame)</span>
+          <input id="itemColor" type="color" value="#ffffff" />
+        </label>
 
-          <button id="addNoteBtn" class="wide">Add note to active page</button>
+        <p class="hint">Drag items to move. Scroll to explore the infinite board.</p>
+      </aside>
 
-          <hr />
-
-          <div class="button-row">
-            <button id="prevPageBtn" class="ghost">◀ Previous page</button>
-            <button id="nextPageBtn" class="ghost">Next page ▶</button>
-          </div>
-          <button id="newPageBtn" class="wide accent">+ Add new page</button>
-
-          <p id="pageIndicator" class="meta">Page 1 of 1</p>
-        </aside>
-
-        <section class="notebook-stage" aria-label="3D notebook">
-          <div class="spotlight"></div>
-          <div id="book" class="book" aria-live="polite"></div>
-        </section>
-      </main>
-    </div>
-
-    <dialog id="helpDialog">
-      <h3>Notebook Studio controls</h3>
-      <ul>
-        <li>Add images/videos by URL.</li>
-        <li>Add notes as stylish paper snippets.</li>
-        <li>Click page corners or use controls to flip.</li>
-        <li>Use “Add new page” to expand your storybook.</li>
-      </ul>
-      <form method="dialog">
-        <button>Close</button>
-      </form>
-    </dialog>
+      <section id="boardViewport" class="board-viewport" aria-label="Infinite creative board">
+        <div id="board" class="board" role="application"></div>
+      </section>
+    </main>
 
     <script src="app.js" defer></script>
   </body>
